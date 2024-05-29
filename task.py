@@ -1,7 +1,3 @@
-def my_func():
-    return "Hello World"
-
-
 def conv_hex(num) -> str:
     """Takes input integer and returns a string containing it's
     hexadecimal value"""
