@@ -1,5 +1,59 @@
-def my_func():
-    return "Hello World"
+def my_datetime(num_sec):
+    """Takes an integer value that represents the number of seconds since the
+    epoch and returns it as a string with the following format: MM-DD-YYYY"""
+
+    SECONDS_PER_MINUTE = 60
+    SECONDS_PER_HOUR = 60 * SECONDS_PER_MINUTE
+    SECONDS_PER_DAY = 24 * SECONDS_PER_HOUR
+    DAYS_IN_MONTH = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
+    DAYS_IN_LEAP_MONTH = [31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
+
+    # Calculate the total number of days since the epoch
+    total_days = num_sec // SECONDS_PER_DAY
+
+    # helper function that returns whether a year is a leap year
+    def is_leap_year(year):
+        if year % 4 == 0:
+            if year % 100 == 0:
+                if year % 400 == 0:
+                    return True
+                else:
+                    return False
+            else:
+                return True
+        else:
+            return False
+
+    # Determines the year
+    year = 1970
+    while True:
+        days_in_year = 366 if is_leap_year(year) else 365
+        if total_days >= days_in_year:
+            total_days -= days_in_year
+            year += 1
+        else:
+            break
+
+    # Determine which days we use depending on Leap Year status
+    if is_leap_year(year):
+        days_in_month = DAYS_IN_LEAP_MONTH
+    else:
+        days_in_month = DAYS_IN_MONTH
+
+    # Determines the month
+    month = 1
+    for days in days_in_month:
+        if total_days >= days:
+            total_days -= days
+            month += 1
+        else:
+            break
+
+    # Determines the day
+    day = total_days + 1
+
+    # Return the result in the proper format: MM-DD-YYYY
+    return f"{month:02d}-{day:02d}-{year}"
 
 
 def conv_hex(num) -> str:
