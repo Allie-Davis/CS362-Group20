@@ -1,3 +1,136 @@
+def conv_num(num_str):
+    def change_string(num_str):
+        """converts a string into integers"""
+
+        dictionary_of_integers = {'0': 0, '1': 1, '2': 2, '3': 3, '4': 4, '5': 5, '6': 6, '7': 7, '8': 8, '9': 9}
+
+        string_to_num = 0
+
+        check_for_negative = False
+        check_for_decimal = False
+        negative = "-"
+        decimal = "."
+        string_without_decimal = ""
+
+        if num_str[0] == negative:
+            check_for_negative = True
+
+        if num_str[0] == decimal:
+            check_for_decimal = True
+            string_without_decimal = num_str[1:]
+
+        # Loops to check for dictionary key, if it matches it is converted from a string to an integer
+        for i in num_str:
+            if i == decimal or i == negative:
+                continue
+            if i in dictionary_of_integers:
+                string_to_num = string_to_num * 10 + dictionary_of_integers[i]
+            else:
+                return None
+
+        # Converts it to a negative
+        if check_for_negative == True:
+            string_to_num = string_to_num * -1
+
+        # Converts it to a decimal
+        if check_for_decimal == True:
+            string_to_num = string_to_num / 10 ** len(string_without_decimal)
+
+        return string_to_num
+
+    def separate_string(num_str):
+        """Separates a string by adding it to a list and then converts it to integers"""
+
+        num_list = []
+        count_decimals = 0
+
+        # check if first digit is decimal point
+        if num_str[0] == ".":
+            return [num_str]
+
+        for i in num_str:
+            if i == ".":
+                count_decimals += 1
+
+        if count_decimals > 1:
+            return []
+
+        if "." in num_str:
+            count_decimals += 1
+            separated_string = ""
+
+            # Seprates string into a list
+            for i in range(len(num_str)):
+                if num_str[i] != ".":
+                    separated_string = separated_string + num_str[i]
+                else:
+                    num_list.append(separated_string)
+                    separated_string = ""
+
+            num_list.append(separated_string)
+
+        else:
+            num_list.append(num_str)
+        return num_list
+
+    def convert_to_hexadecimal(num_str):
+        """Converts a valid hexadecimal to a integer"""
+
+        hex_digits = "0123456789abcdef"
+        num_str = num_str.lower()
+        hex_string_converted_to_int = 0
+
+        for i in num_str:
+            if i in hex_digits:
+                hex_string_converted_to_int *= 16  # arithmetic for conversion of hex
+                hex_string_converted_to_int += hex_digits.index(i)
+            else:
+                return None
+
+        return hex_string_converted_to_int
+
+    # Check if string
+    if type(num_str) is not str:
+        return None
+
+    # Handle hex
+    if "0x" in num_str.lower():
+        hex_result = None
+
+        if num_str.lower().startswith("-0x"):
+            hex_result = convert_to_hexadecimal(num_str[3:]) * -1
+
+        elif num_str.lower().startswith("0x"):
+            hex_result = convert_to_hexadecimal(num_str[2:])
+
+        if hex_result != None:
+            return hex_result
+        else:
+            return None
+
+    # Separate string for decimals
+    separated_strings = separate_string(num_str)
+
+    if len(separated_strings) == 0:
+        return None
+
+    if len(separated_strings) == 1:
+        return change_string(separated_strings[0])
+
+    if len(separated_strings) == 2:
+        first_part_num = change_string(separated_strings[0])
+
+        if separated_strings[1] == "":
+            second_part_of_num = .0
+        else:
+            second_part_of_num = change_string(separated_strings[1]) / 10 ** len(separated_strings[1])
+
+        if first_part_num < 0:
+            return first_part_num - second_part_of_num
+
+        return first_part_num + second_part_of_num
+
+
 def my_datetime(num_sec):
     """Takes an integer value that represents the number of seconds since the
     epoch and returns it as a string with the following format: MM-DD-YYYY"""
