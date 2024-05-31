@@ -1,3 +1,102 @@
+def change_string(num_str):
+    """converts a string into integers"""
+
+    dictionary_of_integers = {'0': 0, '1': 1, '2': 2, '3': 3, '4': 4, '5': 5, '6': 6, '7': 7, '8': 8, '9': 9}
+
+    string_to_num = 0
+    negative = "-"
+    decimal = "."
+
+    # Loops to check for dictionary key, if it matches it is converted from a string to an integer
+    for i in num_str:
+        if i == decimal or i == negative:
+            continue
+        if i in dictionary_of_integers:
+            string_to_num = string_to_num * 10 + dictionary_of_integers[i]
+        else:
+            return None
+
+    # Converts it to a negative
+    if num_str[0] == negative:
+        string_to_num = string_to_num * -1
+
+    # Converts it to a decimal
+    if num_str[0] == decimal:
+        string_to_num = string_to_num / 10 ** len(num_str[1:])
+
+    return string_to_num
+
+
+def convert_to_hexadecimal(num_str):
+    """Converts a valid hexadecimal to a integer"""
+
+    if num_str.lower().startswith("-0x"):
+        num_str = convert_to_hexadecimal(num_str[3:]) * -1
+
+    elif num_str.lower().startswith("0x"):
+        num_str = num_str[2:]
+
+    hex_digits = "0123456789abcdef"
+    num_str = num_str.lower()
+    hex_string_converted_to_int = 0
+
+    for i in num_str:
+        if i in hex_digits:
+            hex_string_converted_to_int *= 16  # arithmetic for conversion of hex
+            hex_string_converted_to_int += hex_digits.index(i)
+        else:
+            return None
+
+    return hex_string_converted_to_int
+
+
+def separate_strings(num_str):
+    # Separate string for decimals
+    separated_strings = num_str.split(".")
+
+    if len(separated_strings) == 0:
+        return None
+
+    if len(separated_strings) == 1:
+        return change_string(separated_strings[0])
+
+    if len(separated_strings) == 2:
+        if separated_strings[0] == "":
+            first_part_num = 0.0
+        else:
+            first_part_num = change_string(separated_strings[0])
+
+        if separated_strings[1] == "":
+            second_part_of_num = .0
+
+        else:
+            second_part_of_num = change_string(separated_strings[1]) / 10 ** len(separated_strings[1])
+
+        if first_part_num < 0:
+            return first_part_num - second_part_of_num
+
+        return first_part_num + second_part_of_num
+
+
+def conv_num(num_str):
+    # Handle hex
+    if "0x" in num_str.lower():
+        hex_result = None
+
+        if num_str.lower().startswith("-0x"):
+            hex_result = convert_to_hexadecimal(num_str[3:]) * -1
+
+        elif num_str.lower().startswith("0x"):
+            hex_result = convert_to_hexadecimal(num_str[2:])
+
+        if hex_result is not None:
+            return hex_result
+
+        return None
+
+    return separate_strings(num_str)
+
+
 def my_datetime(num_sec):
     """Takes an integer value that represents the number of seconds since the
     epoch and returns it as a string with the following format: MM-DD-YYYY"""
