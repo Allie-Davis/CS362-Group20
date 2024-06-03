@@ -23,7 +23,7 @@ class TestMyDatetime(unittest.TestCase):
 
     def test_conv_endian_7(self):
         self.assertEqual(conv_endian(0), "00")
-    
+
     def test_conv_num_regular(self):
         self.assertEqual(conv_num('12345'), 12345)
 
