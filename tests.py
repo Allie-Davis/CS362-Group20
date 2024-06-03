@@ -3,6 +3,24 @@ from task import my_datetime, conv_num
 
 
 class TestMyDatetime(unittest.TestCase):
+    def test_conv_endian_1(self):
+        self.assertEqual(conv_endian(954786, 'big'), '0E 91 A2')
+
+    def test_conv_endian_2(self):
+        self.assertEqual(conv_endian(954786), '0E 91 A2')
+
+    def test_conv_endian_3(self):
+        self.assertEqual(conv_endian(-954786), '-0E 91 A2')
+
+    def test_conv_endian_4(self):
+        self.assertEqual(conv_endian(954786, 'little'), 'A2 91 0E')
+
+    def test_conv_endian_5(self):
+        self.assertEqual(conv_endian(-954786, 'little'), '-A2 91 0E')
+
+    def test_conv_endian_6(self):
+        self.assertEqual(conv_endian(954786, 'other'), None)
+    
     def test_conv_num_regular(self):
         self.assertEqual(conv_num('12345'), 12345)
 
