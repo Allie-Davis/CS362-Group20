@@ -152,7 +152,7 @@ def my_datetime(num_sec):
     day = total_days + 1
 
     # Return the result in the proper format: MM-DD-YYYY
-    return f"{month:02d}-{day:02d}-{year}"
+    return '-'.join([str(month).zfill(2), str(day).zfill(2), str(year)])
 
 
 def conv_hex(num) -> str:
