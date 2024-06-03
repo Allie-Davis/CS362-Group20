@@ -95,6 +95,39 @@ class TestMyDatetime(unittest.TestCase):
             num_sec = random.randint(0, total_seconds_in_75_years - 1)
             check_datetime_conversion(self, num_sec)
 
+    def test_leap_dates_and_far_out_date_testing(self):
+        """Tests for leap, non-leap years and leap day"""
+        test_cases = [
+            (1971, 1, 1),  # Non-leap year
+            (1972, 1, 1),  # Leap year
+            (1972, 2, 29),  # Leap day
+            (2000, 1, 1),  # Leap year (Y2K)
+            (2000, 2, 29),  # Leap day
+            (2001, 1, 1),  # Non-leap year
+            (2020, 1, 1),  # Leap year
+            (2021, 1, 1),  # Non-leap year
+            (2024, 1, 1),  # Leap year
+            (2100, 1, 1),  # far out date
+            (2500, 6, 25),  # super far out date
+            (3000, 7, 26)  # extremely far out date
+        ]
+
+        for year, month, day in test_cases:
+            num_sec = date_to_seconds(year, month, day)
+            check_datetime_conversion(self, num_sec)
+
+    def edge_testing(self):
+        """ Tests for the edge examples"""
+        test_cases = [
+            1,
+            59,  # last minute before first hour
+            3600,  # first hour
+            86399  # last second before first day ends
+        ]
+
+        for num_sec in test_cases:
+            check_datetime_conversion(self, num_sec)
+
 
 if __name__ == '__main__':
     unittest.main()
