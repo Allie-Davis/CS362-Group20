@@ -1,8 +1,38 @@
 import unittest
-from task import my_datetime
+from task import my_datetime, conv_num
 
 
 class TestMyDatetime(unittest.TestCase):
+    def test_conv_num_regular(self):
+        self.assertEqual(conv_num('12345'), 12345)
+
+    def test_conv_num_regular_with_decimal(self):
+        self.assertEqual(conv_num('-123.45'), -123.45)
+
+    def test_conv_num_decimal_only(self):
+        self.assertEqual(conv_num('.45'), 0.45)
+
+    def test_conv_num_regular_with_empty_decimal(self):
+        self.assertEqual(conv_num('123.'), 123.0)
+
+    def test_conv_num_working_uppercase_hex(self):
+        self.assertEqual(conv_num('0xAD4'), 2772)
+
+    def test_conv_num_working_lowercase_hex(self):
+        self.assertEqual(conv_num('0Xad4'), 2772)
+
+    def test_conv_num_working_lowercase_negative_hex(self):
+        self.assertEqual(conv_num('-0Xad4'), -2772)
+
+    def test_conv_num_incorrect_hex(self):
+        self.assertEqual(conv_num('0xAZ4'), None)
+
+    def test_conv_num_regular_with_hex(self):
+        self.assertEqual(conv_num('12345A'), None)
+
+    def test_conv_num_multiple_decimals(self):
+        self.assertEqual(conv_num('12.3.45'), None)
+
     def test_epoch(self):
         self.assertEqual(my_datetime(0), '01-01-1970')
 
